@@ -1,0 +1,56 @@
+name: build
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Manifest parses, bundle is valid
+        run: |
+          python3 -m json.tool pkg/manifest.json >/dev/null
+          sh tools/check-bundle.sh
+
+  release:
+    needs: check
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      RVP_STORE_REV: 603c02925ca2417736d3726675de7d3aa3fa2eed
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Checkout store (rvp-pack source)
+        uses: actions/checkout@v4
+        with:
+          repository: eXXon48/cmu-re-store
+          ref: ${{ env.RVP_STORE_REV }}
+          token: ${{ secrets.STORE_READ_TOKEN }}
+          path: store
+          persist-credentials: false
+
+      - name: Build rvp-pack
+        working-directory: store
+        run: |
+          rustup toolchain install
+          cargo build --release --offline --bin rvp-pack
+
+      - name: Pack Revised Store package
+        run: |
+          sh tools/mkpkg.sh "${GITHUB_REF_NAME#v}" store/target/release/rvp-pack "cmu-re-sys-trust-${GITHUB_REF_NAME}.rvp"
+          sha256sum "cmu-re-sys-trust-${GITHUB_REF_NAME}.rvp" | tee "cmu-re-sys-trust-${GITHUB_REF_NAME}.rvp.sha256"
+
+      - name: Attach package to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            cmu-re-sys-trust-${{ github.ref_name }}.rvp
+            cmu-re-sys-trust-${{ github.ref_name }}.rvp.sha256
