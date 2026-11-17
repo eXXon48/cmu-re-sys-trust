@@ -14,8 +14,7 @@ installs both together with the Revised Store).
 
 ## Install / revert
 
-Install or uninstall it in the Revised Store. No restart needed. Uninstalling removes the
-both copies.
+Install or uninstall it in the Revised Store. No restart needed. Uninstalling removes both copies.
 
 ## Refreshing the roots
 
