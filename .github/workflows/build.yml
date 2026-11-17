@@ -45,12 +45,13 @@ jobs:
 
       - name: Pack Revised Store package
         run: |
-          sh tools/mkpkg.sh "${GITHUB_REF_NAME#v}" store/target/release/rvp-pack "cmu-re-sys-trust-${GITHUB_REF_NAME}.rvp"
-          sha256sum "cmu-re-sys-trust-${GITHUB_REF_NAME}.rvp" | tee "cmu-re-sys-trust-${GITHUB_REF_NAME}.rvp.sha256"
+          VER=${GITHUB_REF_NAME#v}; echo "VER=$VER" >> "$GITHUB_ENV"
+          sh tools/mkpkg.sh "$VER" store/target/release/rvp-pack "cmu-re-sys-trust-$VER.rvp"
+          sha256sum "cmu-re-sys-trust-$VER.rvp" | tee "cmu-re-sys-trust-$VER.rvp.sha256"
 
       - name: Attach package to release
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            cmu-re-sys-trust-${{ github.ref_name }}.rvp
-            cmu-re-sys-trust-${{ github.ref_name }}.rvp.sha256
+            cmu-re-sys-trust-${{ env.VER }}.rvp
+            cmu-re-sys-trust-${{ env.VER }}.rvp.sha256
