@@ -12,4 +12,5 @@ got=$(sha256sum "$tmp/cacert.pem" | cut -d' ' -f1)
 [ -n "$want" ] && [ "$want" = "$got" ] || { echo "sha256 mismatch: want $want got $got" >&2; exit 1; }
 sh tools/check-bundle.sh "$tmp/cacert.pem"
 cp "$tmp/cacert.pem" pkg/payload/certs/ca-certificates.crt
+cp "$tmp/cacert.pem" pkg/payload/certs/cert.pem   # same bytes: one file per live path (the daemon has no outward links yet)
 echo "bundle updated: $(sed -n 's/^## Certificate data from Mozilla as of: //p' pkg/payload/certs/ca-certificates.crt)"

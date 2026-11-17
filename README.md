@@ -5,8 +5,8 @@ Mozilla bundle at `/etc/ssl/certs/cacert.pem`, and not at the paths TLS clients 
 libcurl expects `/etc/ssl/certs/ca-certificates.crt`, the stock OpenSSL 1.0.1u expects
 `/usr/lib/ssl/cert.pem`. Neither exists, and modern roots (e.g. ISRG Root X1) are missing.
 
-This package installs curl's extract of the Mozilla CA bundle into its own package directory
-on `/data_persist` and adds two symlinks at those standard paths. The stock `cacert.pem` is
+This package installs curl's extract of the Mozilla CA bundle at both standard paths
+(two identical copies: the Store cannot place symlinks yet). The stock `cacert.pem` is
 left untouched. Any daemon, in any language, then verifies certificates "like a browser".
 
 Certificate validity also needs a real clock: install `cmu-re-sys-time` too (the USB stick
@@ -15,7 +15,7 @@ installs both together with the Revised Store).
 ## Install / revert
 
 Install or uninstall it in the Revised Store. No restart needed. Uninstalling removes the
-bundle and both symlinks.
+both copies.
 
 ## Refreshing the roots
 

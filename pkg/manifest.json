@@ -10,8 +10,7 @@
   "depends": "",
   "conflicts": "",
   "files": [
-    { "live": "certs/ca-certificates.crt", "payload": "payload/certs/ca-certificates.crt", "mode": "0644", "owner": "1000:1000", "type": "new", "apply": "whole-file" },
-    { "live": "/etc/ssl/certs/ca-certificates.crt", "target": "certs/ca-certificates.crt", "mode": "0777", "owner": "1000:1000", "type": "link", "apply": "whole-file", "reason": "libcurl and most TLS clients read root certificates from this path; absent in stock" },
-    { "live": "/usr/lib/ssl/cert.pem", "target": "certs/ca-certificates.crt", "mode": "0777", "owner": "1000:1000", "type": "link", "apply": "whole-file", "reason": "default root certificate file of the stock OpenSSL 1.0.1u (OPENSSLDIR /usr/lib/ssl); absent in stock" }
+    { "live": "/etc/ssl/certs/ca-certificates.crt", "payload": "payload/certs/ca-certificates.crt", "mode": "0644", "owner": "1000:1000", "type": "new", "apply": "whole-file", "reason": "libcurl and most TLS clients read root certificates from this path; absent in stock" },
+    { "live": "/usr/lib/ssl/cert.pem", "payload": "payload/certs/cert.pem", "mode": "0644", "owner": "1000:1000", "type": "new", "apply": "whole-file", "reason": "default root certificate file of the stock OpenSSL 1.0.1u (OPENSSLDIR /usr/lib/ssl); absent in stock" }
   ]
 }
