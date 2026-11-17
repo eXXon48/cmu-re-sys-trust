@@ -22,7 +22,8 @@ Install or uninstall it in the Revised Store. No restart needed. Uninstalling re
 sh tools/update-bundle.sh    # downloads https://curl.se/ca/cacert.pem, checks its sha256
 ```
 
-Commit the changed `pkg/payload/certs/ca-certificates.crt` and tag a new release.
+It rewrites both payload copies, `pkg/payload/certs/ca-certificates.crt` and
+`pkg/payload/certs/cert.pem`. Run `sh tools/check-bundle.sh`, commit both, and tag a new release.
 
 ## Build
 
